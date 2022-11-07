@@ -45,18 +45,15 @@ public class Filter {
         for (String key : filterKeys) {
             String value = filters.get(key);
             switch (key) {
-                case ("name"): {
+                case "name":
                     if (!Objects.equals(vacancy.getName(), value)) return false;
                     break;
-                }
-                case ("id"): {
+                case "id":
                     if (!Objects.equals(vacancy.getId().toString(), value)) return false;
                     break;
-                }
-                case ("keySkill"): {
+                case "keySkill":
                     if (!vacancy.getKeySkills().getKeySkills().contains(value)) return false;
                     break;
-                }
             }
         }
         return true;
