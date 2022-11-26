@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class HeadHunterBot extends TelegramLongPollingBot {
 
     private final String BOT_NAME = "@HeadHunterURFUBot";
-    private final String BOT_TOKEN = "5818376016:AAEqj-nTZBkY8y3ziImT1RblB-m1T6t4EZg";
+    private final String BOT_TOKEN = System.getenv("BOT_TOKEN");
     private final int RECONNECT_PAUSE = 1000;
 
     public final Queue<Object> sendQueue = new ConcurrentLinkedQueue<>();
