@@ -9,7 +9,6 @@ import service.Notify;
  * Класс для обработки команды уведомлений
  */
 public class NotifyHandler extends AbstractHandler {
-
     public NotifyHandler(HeadHunterBot bot) {
         super(bot);
     }
@@ -19,4 +18,10 @@ public class NotifyHandler extends AbstractHandler {
         Thread thread = new Thread(new Notify(bot, chatId));
         thread.start();
     }
+
+    @Override
+    public AbstractHandler setBot(HeadHunterBot bot) {
+        return this;
+    }
+
 }
