@@ -24,4 +24,5 @@ public abstract class AbstractHandler {
      */
     public abstract void operate(String chatId, ParsedCommand parsedCommand, Update update) throws JsonProcessingException;
 
+    public abstract AbstractHandler setBot(HeadHunterBot bot);
 }

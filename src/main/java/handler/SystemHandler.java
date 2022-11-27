@@ -29,10 +29,16 @@ public class SystemHandler extends AbstractHandler {
         }
     }
 
+    @Override
+    public AbstractHandler setBot(HeadHunterBot bot) {
+        return this;
+    }
+
     /**
      * Получить помощь по команде
-     * @param chatID чат телегам
-     * @param parsedCommand  спарсенная команда
+     *
+     * @param chatID        чат телегам
+     * @param parsedCommand спарсенная команда
      * @return сообщение для телеграм бота
      */
     private SendMessage getMessageHelp(String chatID, ParsedCommand parsedCommand) {
@@ -54,10 +60,12 @@ public class SystemHandler extends AbstractHandler {
 
         return sendMessage;
     }
+
     /**
      * Получить информацию о боте
-     * @param chatID чат телегам
-     * @param parsedCommand  спарсенная команда
+     *
+     * @param chatID        чат телегам
+     * @param parsedCommand спарсенная команда
      * @return сообщение для телеграм бота
      */
     private SendMessage getMessageStart(String chatID, ParsedCommand parsedCommand) {

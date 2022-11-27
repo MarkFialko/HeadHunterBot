@@ -22,6 +22,11 @@ public class UserHandler extends AbstractHandler {
 
     }
 
+    @Override
+    public AbstractHandler setBot(HeadHunterBot bot) {
+        return this;
+    }
+
     /**
      * Получить информацию о пользователе
      * @param chatId чат телеграм
