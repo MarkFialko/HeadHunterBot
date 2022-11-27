@@ -12,6 +12,7 @@ import command.Parser;
  * Класс обработчика полученных сообщений
  */
 public class MessageReceiver implements Runnable {
+    private AbstractHandler vacanciesHandler = new VacanciesHandler(new HeadHunterBot());
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1000;
     private HeadHunterBot bot;
     private Parser parser;
@@ -94,7 +95,7 @@ public class MessageReceiver implements Runnable {
         return switch (command) {
             case START, HELP -> new SystemHandler(bot);
             case NOTIFY -> new NotifyHandler(bot);
-            case VACANCIES -> new VacanciesHandler(bot);
+            case VACANCIES -> vacanciesHandler.setBot(bot);
             case USER -> new UserHandler(bot);
             default -> new DefaultHandler(bot);
         };
