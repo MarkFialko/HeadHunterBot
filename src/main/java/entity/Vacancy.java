@@ -13,21 +13,12 @@ import java.util.List;
 public class Vacancy {
     private static final String API_ADDRESS = "vacancies/";
     private static final ObjectMapper mapper = new ObjectMapper();
-    private String id;
     private String name;
 
     private String alternateUrl;
 
     public String getName() {
         return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -61,11 +52,11 @@ public class Vacancy {
      * @return
      * @throws JsonProcessingException
      */
-    public static List<Vacancy> getVacancies() throws JsonProcessingException {
+    public static List<Vacancy> getVacancies(String query) throws JsonProcessingException {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
-        String responseBody = API.getResponse(API_ADDRESS);
+        String responseBody = API.getResponse(API_ADDRESS + query);
 
         return  mapper.readValue(responseBody, HeadHunter.class).items;
     }
