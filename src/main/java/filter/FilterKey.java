@@ -1,4 +1,4 @@
-package entity;
+package filter;
 
 /**
  * Enum c параметрами для запроса к API

@@ -1,20 +1,16 @@
 package handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import command.BotCommand;
 import command.ParsedCommand;
 import command.VacanciesCommand;
-import entity.Filter;
-import entity.FilterData;
+import filter.Filter;
+import filter.FilterData;
 import entity.HeadHunterBot;
 import entity.Vacancy;
-import keyboard.Keyboard;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**

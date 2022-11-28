@@ -1,7 +1,7 @@
 package command;
 
-import entity.FilterData;
-import entity.FilterKey;
+import filter.FilterData;
+import filter.FilterKey;
 import javafx.util.Pair;
 import keyboard.Keyboard;
 import keyboard.KeyboardCreator;

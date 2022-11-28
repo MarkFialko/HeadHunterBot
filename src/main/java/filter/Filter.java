@@ -1,4 +1,4 @@
-package entity;
+package filter;
 
 import javafx.util.Pair;
 

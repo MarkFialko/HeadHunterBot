@@ -1,4 +1,4 @@
-package entity;
+package filter;
 
 /**
  * Enum для отправки сообщений у вакансий
