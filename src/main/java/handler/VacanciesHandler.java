@@ -59,7 +59,7 @@ public class VacanciesHandler extends AbstractHandler {
         if (Objects.equals(text, FilterData.FILTER_GET.getValue())) {
             StringBuilder textBuilder = new StringBuilder(text);
             for (Vacancy vacancy : Vacancy.getVacancies(vacancyFilter.getStringFilters())) {
-                textBuilder.append(vacancy.getInfo()).append("\n\n");
+                textBuilder.append(vacancy.toString()).append("\n\n");
             }
             text = textBuilder.toString();
             vacancyFilter.removeFilter();

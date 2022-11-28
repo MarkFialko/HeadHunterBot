@@ -29,7 +29,7 @@ public class User {
         return firstName;
     }
 
-    public String getInfo() {
+    public String toString() {
         return new StringBuilder()
                 .append("Я ")
                 .append(firstName)

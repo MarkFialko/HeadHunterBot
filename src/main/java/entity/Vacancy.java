@@ -37,7 +37,7 @@ public class Vacancy {
      * Получить информацию о вакансии в виде строки, которую выведет телеграм бот
      * @return
      */
-    public String getInfo() {
+    public String toString() {
         return new StringBuilder()
                 .append("Вакансия: ")
                 .append(this.name)

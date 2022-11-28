@@ -39,7 +39,7 @@ public class UserHandler extends AbstractHandler {
         User user = new User(chatData.getFirstName(), chatData.getLastName());
 
         message.setChatId(chatId);
-        message.setText(user.getInfo());
+        message.setText(user.toString());
 
         return message;
     }
