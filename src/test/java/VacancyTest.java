@@ -16,7 +16,7 @@ public class VacancyTest {
      */
     public void FirstIdTest() throws JsonProcessingException {
         assertEquals("Вакансия: ОФИС-МЕНЕДЖЕР\n" +
-                "Сcылка: https://hh.ru/vacancy/14447\n", Vacancy.getVacancy("14447").getInfo());
+                "Сcылка: https://hh.ru/vacancy/14447\n", Vacancy.getVacancy("14447").toString());
     }
 
     ;
@@ -27,7 +27,7 @@ public class VacancyTest {
     @Test
     public void SecondIdTest() throws JsonProcessingException {
         assertEquals("Вакансия: Начальник отдела внутреннего аудита\n" +
-                "Сcылка: https://hh.ru/vacancy/14448\n", Vacancy.getVacancy("14448").getInfo());
+                "Сcылка: https://hh.ru/vacancy/14448\n", Vacancy.getVacancy("14448").toString());
     }
 
 }
