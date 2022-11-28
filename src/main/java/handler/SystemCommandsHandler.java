@@ -8,14 +8,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 /**
  * Класс для обработки системных комманд (Не выводят ничего, кроме текста и клавиатуры)
  */
-public class SystemHandler extends AbstractHandler {
+public class SystemCommandsHandler extends AbstractHandler {
     private final HelpCommand helpCommand = new HelpCommand();
     private final StartCommand startCommand = new StartCommand();
 
     private final Boolean NOT_VALID_COMMAND = false;
     private final Boolean VALID_COMMAND = true;
 
-    public SystemHandler(HeadHunterBot bot) {
+    public SystemCommandsHandler(HeadHunterBot bot) {
         super(bot);
     }
 

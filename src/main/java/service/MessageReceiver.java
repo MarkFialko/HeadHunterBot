@@ -93,7 +93,7 @@ public class MessageReceiver implements Runnable {
             return new DefaultHandler(bot);
         }
         return switch (command) {
-            case START, HELP -> new SystemHandler(bot);
+            case START, HELP -> new SystemCommandsHandler(bot);
             case NOTIFY -> new NotifyHandler(bot);
             case VACANCIES -> vacanciesHandler.setBot(bot);
             case USER -> new UserHandler(bot);
