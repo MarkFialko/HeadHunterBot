@@ -10,17 +10,17 @@ import java.net.http.HttpResponse;
  * Класс для работы с API HeadHunter
  */
 public class API {
-    final static String url = "https://api.hh.ru/";
+    final static String basic_url = "https://api.hh.ru/";
 
     /**
      *
-     * @param address - адрес, с которого брать данные
+     * @param url - адрес, с которого брать данные
      * @return сообщение с ответом на запрос
      */
-    public static String getResponse(String address) {
+    public static String getResponse(String url) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url + address))
+                .uri(URI.create(basic_url + url))
                 .build();
 
         try {
