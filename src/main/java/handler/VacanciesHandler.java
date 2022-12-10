@@ -1,16 +1,19 @@
 package handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import command.HelpCommand;
 import command.ParsedCommand;
 import command.VacanciesCommand;
 import filter.Filter;
 import filter.FilterData;
 import entity.HeadHunterBot;
 import entity.Vacancy;
+import keyboard.KeyboardCreator;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -29,45 +32,61 @@ public class VacanciesHandler extends AbstractHandler {
     public void operate(String chatId, ParsedCommand parsedCommand, Update update) throws JsonProcessingException {
 
         String text = vacanciesCommand.selectMessage(parsedCommand);
-        InlineKeyboardMarkup keyboard = vacanciesCommand.selectKeyboard(parsedCommand);
+        final boolean isValid = text != FilterData.FILTER_ERROR.getValue();
 
-        if (!parsedCommand.getText().contains("get")) {
+        InlineKeyboardMarkup keyboard = isValid
+                ? vacanciesCommand.selectKeyboard(parsedCommand)
+                : new HelpCommand().setKeyboard(false);
+
+
+        if (!parsedCommand.getText().contains("get") && isValid) {
             vacancyFilter.setFilters(vacanciesCommand.getFilterData(parsedCommand));
         }
 
-        bot.sendQueue.add(collectVacancies(chatId, keyboard, text));
+        if (Objects.equals(text, FilterData.FILTER_GET.getValue())) {
+            for (Vacancy vacancy : Vacancy.getVacancies(vacancyFilter.getStringFilters())) {
+                bot.sendQueue.add(prepareVacancy(chatId,vacancy));
+            }
+            vacancyFilter.removeFilter();
+        } else {
+            bot.sendQueue.add(getVacancyFilters(chatId, keyboard, text));
+        }
     }
 
-    @Override
-    public AbstractHandler setBot(HeadHunterBot bot) {
-        this.bot = bot;
-        return this;
-    }
 
     /**
-     *
-     * @param chatId чат телеграма
+     * @param chatId   чат телеграма
      * @param keyboard клавиатура телеграма
-     * @param text текст с сообщением для отправки
+     * @param text     текст с сообщением для отправки
      * @return
      * @throws JsonProcessingException
      */
-    private SendMessage collectVacancies(String chatId, InlineKeyboardMarkup keyboard, String text) throws JsonProcessingException {
+    private SendMessage getVacancyFilters(String chatId, InlineKeyboardMarkup keyboard, String text) throws JsonProcessingException {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-
-        if (Objects.equals(text, FilterData.FILTER_GET.getValue())) {
-            StringBuilder textBuilder = new StringBuilder(text);
-            for (Vacancy vacancy : Vacancy.getVacancies(vacancyFilter.getStringFilters())) {
-                textBuilder.append(vacancy.toString()).append("\n\n");
-            }
-            text = textBuilder.toString();
-            vacancyFilter.removeFilter();
-        }
 
         message.setText(text);
         message.setReplyMarkup(keyboard);
 
         return message;
     }
+
+
+    private SendMessage prepareVacancy(String chatId, Vacancy vacancy) {
+
+        HashMap<String,String> addFavouriteVacancy = new HashMap<>();
+
+        addFavouriteVacancy.put("Добавить в избранное","/addToFavourite " + vacancy.getId());
+
+        SendMessage vacancyMessage = new SendMessage();
+
+        vacancyMessage.setChatId(chatId);
+        vacancyMessage.setText(vacancy.toString() + "\n\n");
+
+        vacancyMessage.setReplyMarkup(KeyboardCreator.getInlineKeyboard(1,addFavouriteVacancy));
+
+        return vacancyMessage;
+
+    }
+
 }
