@@ -3,6 +3,7 @@ package filter;
 import javafx.util.Pair;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,10 +27,12 @@ public class Filter {
     /**
      * Устанавливает пару ключа и значения в запросе
      *
-     * @param filter
+     * @param filterList
      */
-    public void setFilters(Pair<String, String> filter) {
-        this.filters.put(filter.getKey(), filter.getValue());
+    public void setFilters(List<Pair<String, String>> filterList) {
+        for (Pair<String, String> filterPair : filterList) {
+            this.filters.put(filterPair.getKey(), filterPair.getValue());
+        }
     }
 
     /**

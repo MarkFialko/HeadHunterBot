@@ -6,7 +6,11 @@ package command;
  */
 public enum Command {
     NONE,
+    AUTH,
+    ADDTOFAVOURITE,
     HELP,
+    FAVOURITES,
+    DELETEFAVOURITE,
     START,
     NOTIFY,
     USER,
