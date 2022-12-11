@@ -1,4 +1,4 @@
-package entity;
+package database.featuredVacancies;
 
 import javax.persistence.*;
 import java.util.Objects;
