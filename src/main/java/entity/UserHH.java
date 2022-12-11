@@ -1,9 +1,9 @@
 package entity;
 
 /**
- * Класс пользователя
+ * Класс данных пользваотеля с HH API
  */
- public class UserHH {
+public class UserHH {
 
     private Long id;
     private String email;
@@ -62,4 +62,26 @@ package entity;
 
     public UserHH() {
     }
+
+    /**
+     * Метод выводит информаицию о пользваотеле
+     * @return
+     */
+    public String toString() {
+        String userInfo = new StringBuilder()
+                .append("Имя: ")
+                .append(getFirstName())
+                .append("\n")
+                .append("Фамилия: ")
+                .append(getLastName())
+                .append("\n")
+                .append("Телефон: ")
+                .append(getPhone())
+                .append("\n")
+                .append("Почта: ")
+                .append(getEmail())
+                .toString();
+        return userInfo;
+    }
+
 }

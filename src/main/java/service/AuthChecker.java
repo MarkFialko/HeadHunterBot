@@ -3,15 +3,17 @@ package service;
 
 import auth.Auth;
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import database.user.UserBase;
 import entity.HeadHunterBot;
-import entity.Users;
-import handler.HibernateUtil;
-import org.hibernate.Session;
+import database.user.Users;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Класс потока для проверки кода авторизации у пользователя
+ */
 public class AuthChecker implements Runnable {
     Boolean isActive = true;
     HeadHunterBot bot;
@@ -24,6 +26,9 @@ public class AuthChecker implements Runnable {
         this.update = update;
     }
 
+    /**
+     * Проверяет наличие кода для авотризации, пока он не прийдет с сервера
+     */
     @Override
     public void run() {
 
@@ -34,28 +39,30 @@ public class AuthChecker implements Runnable {
                 try {
                     OAuth2AccessToken accessToken = Auth.getAccessToken(code);
 
-                    Session session = HibernateUtil.getSessionFactory().openSession();
-                    session.getTransaction().begin();
+                    if (new UserBase().findByTelegramId(telegramId) == null) {
+                        Users newUser = new Users();
+                        newUser.setTelegramId(telegramId);
+                        newUser.setAccessToken(accessToken.getAccessToken());
+                        new UserBase().save(newUser);
+                    } else {
+                        Users oldUser = new Users();
+                        oldUser.setTelegramId(telegramId);
+                        oldUser.setAccessToken(accessToken.getAccessToken());
+                        new UserBase().update(oldUser);
+                    }
 
-                    Users user = new Users();
+                    disabled();
 
-                    user.setAccessToken(accessToken.getAccessToken());
-                    user.setTelegramId(telegramId);
-
-                    session.save(user);
-                    session.getTransaction().commit();
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
+                } catch (IOException | ExecutionException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
     }
 
+    /**
+     * Останавливает поиск кода после его нахождения
+     */
     public void disabled() {
         isActive = false;
     }

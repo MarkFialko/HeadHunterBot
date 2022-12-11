@@ -2,46 +2,45 @@ package handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import command.ParsedCommand;
-import entity.FeaturedVacancies;
+import database.featuredVacancies.FeaturedVacancies;
+import database.featuredVacancies.FeaturedVacanciesBase;
 import entity.HeadHunterBot;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+/**
+ * Класс для добавления вакансии в избранное
+ */
 public class FavouriteHandler extends AbstractHandler {
     public FavouriteHandler(HeadHunterBot bot) {
         super(bot);
     }
 
+    /**
+     * Метод добавляет вакансию в избранное у конкретного пользователя
+     * @param chatId        чат из телеграма
+     * @param parsedCommand - спарсенная команда
+     * @param update        - эвент из телеграмма
+     * @throws JsonProcessingException
+     */
     @Override
     public void operate(String chatId, ParsedCommand parsedCommand, Update update) throws JsonProcessingException {
 
         try {
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            session.getTransaction().begin();
-
-            FeaturedVacancies featuredVacancies = new FeaturedVacancies();
 
             String vacancyId = parsedCommand.getText().trim();
             Integer userId = Math.toIntExact(update.getCallbackQuery().getMessage().getChat().getId());
-
-            Query query = session.createSQLQuery("SELECT * FROM featured_vacancies WHERE user_id = :id AND vacancy_id = :vacId");
-
-            query.setParameter("id", userId);
-            query.setParameter("vacId", vacancyId);
-
-            if (query.getResultList().isEmpty()) {
-
+            // Проверка на нахождение данной вакансии в избранном
+            if (new FeaturedVacanciesBase().find(vacancyId,userId)) {
+                FeaturedVacancies featuredVacancies = new FeaturedVacancies();
                 featuredVacancies.setVacancyId(vacancyId);
                 featuredVacancies.setUserId(userId);
 
-                session.save(featuredVacancies);
-                session.getTransaction().commit();
+                new FeaturedVacanciesBase().save(featuredVacancies);
 
                 bot.sendQueue.add(new SendMessage(chatId, "Вакансия добавлена в избранное.\n"));
             } else {
-                bot.sendQueue.add(new SendMessage(chatId, "Вы уже добавляли эту вакансию в избранное, чтобы посмотреть избранные вакансии,введите /favourites!\n"));
+                bot.sendQueue.add(new SendMessage(chatId, "Вы уже добавляли эту вакансию в избранное, чтобы посмотреть избранные вакансии,введите /favourites"));
             }
 
         } catch (Exception e) {
