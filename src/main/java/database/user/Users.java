@@ -1,4 +1,4 @@
-package entity;
+package database.user;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -6,24 +6,11 @@ import java.util.Objects;
 @Entity
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @Basic
     @Column(name = "telegram_id", nullable = true)
     private Integer telegramId;
     @Basic
     @Column(name = "access_token", nullable = true, length = -1)
     private String accessToken;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Integer getTelegramId() {
         return telegramId;
@@ -46,11 +33,11 @@ public class Users {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return Objects.equals(telegramId, users.telegramId) && Objects.equals(accessToken, users.accessToken);
+        return Objects.equals(telegramId, users.telegramId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(telegramId, accessToken);
+        return Objects.hash(telegramId);
     }
 }
