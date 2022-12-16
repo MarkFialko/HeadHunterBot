@@ -1,6 +1,7 @@
 package handler;
 
 import auth.Auth;
+import auth.AuthInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -29,7 +30,6 @@ public class UserHandler extends AbstractHandler {
 
         Integer telegramId = Math.toIntExact(update.getMessage().getChat().getId());
         Users user = new UserBase().findByTelegramId(telegramId);
-
         if (user != null) {
             String accessToken = user.getAccessToken();
             ObjectMapper mapper = new ObjectMapper();
@@ -38,14 +38,14 @@ public class UserHandler extends AbstractHandler {
 
             String response = Auth.getResponse(accessToken);
 
-            if (!Objects.equals(response, "Ошибка при авторизации")) {
+            if (!Objects.equals(response, AuthInfo.AUTH_ERROR_MESSAGE.toString())) {
                 UserHH newUser = mapper.readValue(response, UserHH.class);
                 bot.sendQueue.add(getUserInfo(chatId, newUser.toString()));
             } else {
-                bot.sendQueue.add(new SendMessage(chatId,"/auth"));
+                bot.sendQueue.add(new SendMessage(chatId, AuthInfo.OLD_USER_FOR_AUTH_MESSAGE.toString()));
             }
         } else {
-            bot.sendQueue.add(new SendMessage(chatId,"/auth"));
+            bot.sendQueue.add(new SendMessage(chatId, AuthInfo.NEW_USER_FOR_AUTH_MESSAGE.toString()));
         }
 
     }
@@ -58,9 +58,7 @@ public class UserHandler extends AbstractHandler {
      */
     private SendMessage getUserInfo(String chatId, String text) {
         SendMessage message = new SendMessage();
-
         message.setChatId(chatId);
-
         message.setText(text);
 
         return message;

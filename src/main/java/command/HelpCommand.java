@@ -30,9 +30,10 @@ public class HelpCommand extends BotCommand {
         return switch (commandForHelp) {
             case START -> new StartCommand().getMessageForHelp();
             case HELP -> new HelpCommand().getMessageForHelp();
-            case NOTIFY -> CommandInfo.NOTIFY_HELPMESSAGE.getValue();
             case USER -> new UserCommand().getMessageForHelp();
+            case FAVOURITES -> CommandInfo.FAVOURITES_HELPMESSAGE.getValue();
             case VACANCIES -> new VacanciesCommand().getMessageForHelp();
+            case AUTH -> CommandInfo.AUTH_HELPMESSAGE.getValue();
             default -> this.getDescription();
         };
 

@@ -5,7 +5,6 @@ import service.MessageReceiver;
 import service.MessageSender;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 
 public class App {
@@ -14,7 +13,7 @@ public class App {
     private static final int PRIORITY_FOR_RECEIVER = 3;
 
 
-    public static void main(String[] args) throws TelegramApiException, IOException, ExecutionException, InterruptedException {
+    public static void main(String[] args) throws TelegramApiException {
         try {
             HttpNanoServer httpNanoServer = new HttpNanoServer();
 

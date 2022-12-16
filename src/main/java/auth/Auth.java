@@ -26,6 +26,7 @@ public class Auth {
 
     /**
      * Получение url для авторизации пользователя
+     *
      * @return
      */
     @SuppressWarnings("PMD.SystemPrintln")
@@ -35,6 +36,7 @@ public class Auth {
 
     /**
      * Получение ответа с api, используя токен
+     *
      * @param accessToken токен, выданный при успешной авторизации пользователя
      * @return
      * @throws IOException
@@ -49,11 +51,10 @@ public class Auth {
                 return response.getBody();
             }
         }
-        return "Ошибка при авторизации";
+        return AuthInfo.AUTH_ERROR_MESSAGE.toString();
     }
 
     /**
-     *
      * @param code - код, полученный при перенаправлении с сайта
      * @return accessToken
      * @throws IOException
@@ -62,7 +63,6 @@ public class Auth {
      */
     public static OAuth2AccessToken getAccessToken(String code) throws IOException, ExecutionException, InterruptedException {
         final OAuth2AccessToken accessToken = service.getAccessToken(code);
-    System.out.println(accessToken);
         return accessToken;
 
     }

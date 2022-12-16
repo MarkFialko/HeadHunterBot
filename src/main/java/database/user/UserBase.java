@@ -16,7 +16,7 @@ public class UserBase {
      */
     public Users findByTelegramId(Integer telegramId) {
         Transaction transaction = null;
-        Users user;
+        Users user = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Query<Users> query = session.createQuery("SELECT b FROM database.user.Users b WHERE b.telegramId = :id", Users.class);

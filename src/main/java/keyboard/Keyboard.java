@@ -8,9 +8,10 @@ import java.util.HashMap;
  */
 public enum Keyboard {
     HELP_KEYBOARD(new HashMap<String, String>() {{
-        put("Уведомления", "/help notify");
         put("Вакансии", "/help vacancies");
         put("Пользователь", "/help user");
+        put("Избранное", "/help favourites");
+        put("Авторизация", "/help auth");
     }}),
     START_KEYBOARD(new HashMap<String, String>() {{
         put("Помощь", "/help");
