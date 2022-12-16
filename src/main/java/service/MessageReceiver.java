@@ -4,14 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import command.Command;
 import command.ParsedCommand;
 import entity.HeadHunterBot;
+import entity.UserHH;
 import handler.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import command.Parser;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Класс обработчика полученных сообщений
  */
 public class MessageReceiver implements Runnable {
+    public UserHH user = new UserHH();
+
     private AbstractHandler vacanciesHandler = new VacanciesHandler(new HeadHunterBot());
     private final int WAIT_FOR_NEW_MESSAGE_DELAY = 1000;
     private HeadHunterBot bot;
@@ -31,7 +37,7 @@ public class MessageReceiver implements Runnable {
             for (Object object = bot.receiveQueue.poll(); object != null; object = bot.receiveQueue.poll()) {
                 try {
                     analyze(object);
-                } catch (JsonProcessingException e) {
+                } catch (IOException | ExecutionException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -46,10 +52,11 @@ public class MessageReceiver implements Runnable {
 
     /**
      * Проверка на тип полученного объекта
+     *
      * @param object
      * @throws JsonProcessingException
      */
-    private void analyze(Object object) throws JsonProcessingException {
+    private void analyze(Object object) throws IOException, ExecutionException, InterruptedException {
         if (object instanceof Update) {
             Update update = (Update) object;
             analyzeForUpdateType(update);
@@ -58,10 +65,11 @@ public class MessageReceiver implements Runnable {
 
     /**
      * Метод отвечает за вызов метода у подходящего хэндлера
+     *
      * @param update эвент телеграма
      * @throws JsonProcessingException
      */
-    private void analyzeForUpdateType(Update update) throws JsonProcessingException {
+    private void analyzeForUpdateType(Update update) throws IOException, ExecutionException, InterruptedException {
 
         Long chatId = 0L;
         String inputText = "";
@@ -84,7 +92,6 @@ public class MessageReceiver implements Runnable {
     }
 
     /**
-     *
      * @param command команда
      * @return хендлер для команды
      */
@@ -94,9 +101,12 @@ public class MessageReceiver implements Runnable {
         }
         return switch (command) {
             case START, HELP -> new SystemCommandsHandler(bot);
-            case NOTIFY -> new NotifyHandler(bot);
             case VACANCIES -> vacanciesHandler.setBot(bot);
             case USER -> new UserHandler(bot);
+            case ADDTOFAVOURITE -> new FavouriteHandler(bot);
+            case FAVOURITES -> new ShowFavouriteHandler(bot);
+            case DELETEFAVOURITE -> new DeleteFavouriteHandler(bot);
+            case AUTH -> new AuthHandler(bot);
             default -> new DefaultHandler(bot);
         };
     }

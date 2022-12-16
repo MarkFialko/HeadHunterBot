@@ -23,10 +23,7 @@ public class DefaultHandler extends AbstractHandler {
 
     }
 
-    @Override
-    public AbstractHandler setBot(HeadHunterBot bot) {
-        return this;
-    }
+
 
     /**
      * Получить справку

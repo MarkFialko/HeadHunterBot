@@ -5,6 +5,9 @@ import command.ParsedCommand;
 import entity.HeadHunterBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
 /**
  * Хендлер для обработки комманд
  */
@@ -17,12 +20,16 @@ public abstract class AbstractHandler {
 
     /**
      * Добавляет в очередь новое сообщение
-     * @param chatId чат из телеграма
+     *
+     * @param chatId        чат из телеграма
      * @param parsedCommand - спарсенная команда
-     * @param update - эвент из телеграмма
+     * @param update        - эвент из телеграмма
      * @throws JsonProcessingException
      */
-    public abstract void operate(String chatId, ParsedCommand parsedCommand, Update update) throws JsonProcessingException;
+    public abstract void operate(String chatId, ParsedCommand parsedCommand, Update update) throws IOException, ExecutionException, InterruptedException;
 
-    public abstract AbstractHandler setBot(HeadHunterBot bot);
+    public AbstractHandler setBot(HeadHunterBot bot) {
+        this.bot = bot;
+        return this;
+    }
 }

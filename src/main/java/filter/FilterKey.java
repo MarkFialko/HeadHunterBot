@@ -7,5 +7,9 @@ public enum FilterKey {
     AREA,
     SCHEDULE,
     SPECIALIZATION,
-    GET
+    EXPERIENCE,
+    SALARY,
+    SALARY_FROM,
+    GET,
+    NONE
 }

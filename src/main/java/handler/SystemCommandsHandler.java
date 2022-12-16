@@ -29,10 +29,6 @@ public class SystemCommandsHandler extends AbstractHandler {
         }
     }
 
-    @Override
-    public AbstractHandler setBot(HeadHunterBot bot) {
-        return this;
-    }
 
     /**
      * Получить помощь по команде
