@@ -2,6 +2,7 @@ package handler;
 
 import auth.Auth;
 import auth.AuthInfo;
+import cipher.CipherHelper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -31,7 +32,7 @@ public class UserHandler extends AbstractHandler {
         Integer telegramId = Math.toIntExact(update.getMessage().getChat().getId());
         Users user = new UserBase().findByTelegramId(telegramId);
         if (user != null) {
-            String accessToken = user.getAccessToken();
+            String accessToken = CipherHelper.decrypt(user.getAccessToken());
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);

@@ -2,7 +2,7 @@ package service;
 
 
 import auth.Auth;
-import com.github.scribejava.core.model.OAuth2AccessToken;
+import cipher.CipherHelper;
 import database.user.UserBase;
 import entity.HeadHunterBot;
 import database.user.Users;
@@ -37,17 +37,18 @@ public class AuthChecker implements Runnable {
                 String code = bot.getServer().getQueryParams().get("code");
                 Integer telegramId = Math.toIntExact(update.getMessage().getChat().getId());
                 try {
-                    OAuth2AccessToken accessToken = Auth.getAccessToken(code);
+                    String accessToken = Auth.getAccessToken(code).getAccessToken();
 
+                    String tokenToSave = CipherHelper.encrypt(accessToken);
                     if (new UserBase().findByTelegramId(telegramId) == null) {
                         Users newUser = new Users();
                         newUser.setTelegramId(telegramId);
-                        newUser.setAccessToken(accessToken.getAccessToken());
+                        newUser.setAccessToken(tokenToSave);
                         new UserBase().save(newUser);
                     } else {
                         Users oldUser = new Users();
                         oldUser.setTelegramId(telegramId);
-                        oldUser.setAccessToken(accessToken.getAccessToken());
+                        oldUser.setAccessToken(tokenToSave);
                         new UserBase().update(oldUser);
                     }
 
